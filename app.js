@@ -58,7 +58,7 @@ function loadJsonFile(jsonFilePath) {
 
 // Route to check the status and clone a repo
 app.get('/status', async (req, res) => {
-    const token = 5; // Replace with your GitHub token
+    const token = process.env.GITHUB_TOKEN; // Replace with your GitHub token
     const repoUrl = 'https://github.com/yedhukrishnagirish/TiddlyProjectRepo';
     const branch = 'main';
     const jsonFilePath = path.join(CLONE_DIR, 'Document Configuration', 'configuration.json');
