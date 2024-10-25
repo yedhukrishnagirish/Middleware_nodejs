@@ -16,7 +16,9 @@ app.use(express.json());  // To parse JSON request body
 // Initialize Neo4j driver
 const driver = neo4j.driver(
     'bolt://neo4j:7687',
-    neo4j.auth.basic("neo4j", "mysecretpassword")
+    neo4j.auth.basic("neo4j", "mysecretpassword",
+        { encrypted: 'ENCRYPTION_ON' }
+    )
 );
 
 const session = driver.session();
