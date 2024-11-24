@@ -59,7 +59,7 @@ function loadJsonFile(jsonFilePath) {
 }
 
 // Route to check the status and clone a repo
-app.get('/status', async (req, res) => {
+app.get('/status_original', async (req, res) => {
     const token = process.env.GITHUB_TOKEN; // Replace with your GitHub token
     const repoUrl = 'https://github.com/yedhukrishnagirish/TiddlyProjectRepo';
     const branch = 'main';
@@ -80,30 +80,196 @@ app.get('/status', async (req, res) => {
     res.json(statusData);
 });
 
+
+
+app.get('/status', async (req, res) => {
+    const responseDataFake = { 
+            name:"def",
+            items:["Load case","Simulation","Testing","Debugging","Deleting","Requirements","Hold","Vacation"],
+            difficulty:["Junior","Senior","Expert"]
+    }
+    
+
+    res.json(responseDataFake);
+});
+
+app.get('/test', async (req, res) => {
+    
+    const responseDataFake = {
+        _uvar_local_task: 'Modalanalyse einer Platte mit Sickenmuster #1',
+        _uvar_local_inscope: 'Wert der Eigenfrequenzen, Modalform',
+        _uvar_local_outscope: 'Amplitude, Materialspannung',
+        _basic_model:{
+        _uvar_local_numerics: {
+                case1: 'FEM',
+                case2: 'Non FEM'
+            },
+        _uvar_local_solver:{ 
+            case1: 'Abaqus',
+            case2: 'Epilysis',
+            case3: 'MSC Nastran',
+            case4: 'UG NX Nastran',
+            case5: 'LS Dyna',
+            case6: 'Radioss',
+            case7: 'OpenRadioss',
+            case8: 'OpenFOAM',
+            case9: 'Fluent',
+            case10: 'StarCCM+'
+
+        }
+
+        },
+        _uvar_local_definition_status: {
+            case1: 'Not Yet Started',
+            case2: 'In Progress',
+            case3: 'Complete'
+        },
+        _physicsmodel_base:{
+            _uvar_local_catbase:{
+                case1: 'Fluid',
+                case2: 'Structure',
+                case3: 'Multi Body'
+            },
+            _uvar_local_catbase_behaviour:{
+                case1: 'Compressible',
+                case2: 'Incompressible',
+                case3: 'Elastic',
+                case4: 'Inelastic'
+
+            },
+            _uvar_local_catbase_thermal:{
+                case1: 'Isothermal',
+                case2: 'Non Isothermal'
+            },
+            _uvar_local_catbase_time:{
+                case1: 'Stationary',
+                case2: 'Transient'
+            },
+            _uvar_local_catbase_complexity:{
+                case1: 'Laminar',
+                case2: 'Turbulent'
+            },
+            _uvar_local_catspecial_1:{
+                case1: 'Fluid',
+                case2: 'Structure',
+                case3: 'Linear',
+                case4: 'Non Linear'
+            },
+
+        },
+        _uvar_local_inscope: 'Die Modalanalyse mit Finiten Elementen ist eine Analyse der Steifigkeitsmatrix. Das Problem wird linearisiert, d. h. es kommen nur elastische Materialeigenschaften zum Einsatz. Kontakte werden vor der Berechnung geschlossen. Die als Ergebnis ausgegebenen Amplituden sind keine absoluten Amplituden, sondern dienen dem relativen Vergleich. Auch Materialspannungen werden mit einer Modalanalyse nicht berechnet. Zur Berechnung von Amplituden und Materialspannungen muss eine Frequency Response-Analyse gemacht werden.'
+
+    };
+
+    res.json(responseDataFake);
+    
+});
+
 // Route to handle POST requests for /submit
-app.post('/submit', (req, res) => {
-    const data = req.body;  // Capture the JSON data sent in the request body
-    console.log('Data received:', data);
+app.get('/definition_hardcode',  async (req, res) => {
 
     const responseDataFake = {
-        difficulty: {
-            case1: 'Junior',
-            case2: 'Senior',
-            case3: 'Expert'
+        _uvar_local_task: 'Modalanalyse einer Platte mit Sickenmuster #1',
+        _uvar_local_inscope: 'Wert der Eigenfrequenzen, Modalform',
+        _uvar_local_outscope: 'Amplitude, Materialspannung',
+        _basic_model: {
+            _uvar_local_numerics: ['FEM', 'Non FEM'], 
+            _uvar_local_solver: [
+                'Abaqus', 'Epilysis', 'MSC Nastran', 'UG NX Nastran', 'LS Dyna',
+                'Radioss', 'OpenRadioss', 'OpenFOAM', 'Fluent', 'StarCCM+'
+            ]
         },
-        items: {
-            case1: 'Load case',
-            case2: 'Simulation',
-            case3: 'Testing',
-            case4: 'Debugging'
+        _uvar_local_definition_status: ['Not Yet Started', 'In Progress', 'Complete'],
+        _physicsmodel_base: {
+            _uvar_local_catbase: ['Fluid', 'Structure', 'Multi Body'],
+            _uvar_local_catbase_behaviour: ['Compressible', 'Incompressible', 'Elastic', 'Inelastic'],
+            _uvar_local_catbase_thermal: ['Isothermal', 'Non Isothermal'],
+            _uvar_local_catbase_time: ['Stationary', 'Transient'],
+            _uvar_local_catbase_complexity: ['Fluid', 'Structure', 'Linear', 'Non Linear']
         },
-        name: 'def'
+        _physicsmodel_special: {
+            _uvar_local_catspecial_1:['Single Phase','Multiphase','Contacts','No Contacts',],
+            _uvar_local_catspecial_2:['Single Species','Multi Species','Simple Conn','Complex Conn'],
+            _uvar_local_catspecial_3:['Acoustic','Non Acoustic']
+        },
+        _uvar_local_gencomdefinition: 'Die Modalanalyse mit Finiten Elementen ist eine Analyse der Steifigkeitsmatrix. Das Problem wird linearisiert, d. h. es kommen nur elastische Materialeigenschaften zum Einsatz...'
     };
+    
+
+    res.json(responseDataFake);
+});
+
+
+
+
+
+app.post('/filtering', async (req, res) => {
+    const data = req.body;  // Capture the JSON data sent in the request body
+    console.log('Data received:', data);
 
     const keys = Object.keys(data);
     console.log('Keys of the received data:', keys);
 
-    res.json(responseDataFake);
+    // Check for the _uvar_local_view key and its value
+    if (data._uvar_local_view === 'Junior') {
+        // Return response if value is Junior
+        const responseDataFake = { 
+            name: "def",
+            items: ["Testing", "Debugging", "Deleting", "Requirements", "Hold", "Vacation"],
+            difficulty:["Junior","Senior","Expert"]
+        };
+        res.json(responseDataFake);
+    } else {
+        // Default response
+        const responseDataFake = { 
+            name: "def",
+            items: ["Load case", "Simulation", "Testing", "Debugging", "Deleting", "Requirements", "Hold", "Vacation"],
+            difficulty:["Junior","Senior","Expert"]
+        };
+        res.json(responseDataFake);
+    }
+});
+
+app.get('/definition', async (req, res) => {
+    const token = process.env.GITHUB_TOKEN; // Replace with your GitHub token
+    const repoUrl = 'https://github.com/yedhukrishnagirish/TiddlyProjectRepo';
+    const branch = 'main';
+    const jsonFilePath = path.join(CLONE_DIR, 'Definition', 'definition.json');
+
+    const cloneSuccess = await cloneRepo(token, repoUrl, branch, CLONE_DIR);
+
+    if (!cloneSuccess) {
+        return res.status(500).json({ error: 'Failed to clone repository' });
+    }
+
+    const statusData = loadJsonFile(jsonFilePath);
+
+    if (!statusData) {
+        return res.status(500).json({ error: 'Failed to read configuration.json from cloned repository' });
+    }
+
+    res.json(statusData);
+});
+
+app.get('/solution', async (req, res) => {
+    const token = process.env.GITHUB_TOKEN; // Replace with your GitHub token
+    const repoUrl = 'https://github.com/yedhukrishnagirish/TiddlyProjectRepo';
+    const branch = 'main';
+    const jsonFilePath = path.join(CLONE_DIR, 'Solution', 'solution.json');
+
+    const cloneSuccess = await cloneRepo(token, repoUrl, branch, CLONE_DIR);
+
+    if (!cloneSuccess) {
+        return res.status(500).json({ error: 'Failed to clone repository' });
+    }
+
+    const statusData = loadJsonFile(jsonFilePath);
+
+    if (!statusData) {
+        return res.status(500).json({ error: 'Failed to read configuration.json from cloned repository' });
+    }
+
+    res.json(statusData);
 });
 
 // Route to handle database query
@@ -163,5 +329,5 @@ process.on('exit', () => {
 // Start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Server is running on http://0.0.0.0:${port}`);
+    console.log(`API is up through , http://0.0.0.0:${port}`);
 });
