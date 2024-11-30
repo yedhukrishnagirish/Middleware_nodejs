@@ -1,0 +1,33 @@
+{
+    "@context": {
+      "ex": "http://example.org/ns#",
+      "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+      "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+      "xsd": "http://www.w3.org/2001/XMLSchema#"
+    },
+    "@graph": [
+      {
+        "@id": "ex:Person",
+        "@type": "rdfs:Class"
+      },
+      {
+        "@id": "ex:hasName",
+        "@type": "rdf:Property",
+        "rdfs:domain": "ex:Person",
+        "rdfs:range": "xsd:string"
+      },
+      {
+        "@id": "ex:hasAge",
+        "@type": "rdf:Property",
+        "rdfs:domain": "ex:Person",
+        "rdfs:range": "xsd:int"
+      },
+      {
+        "@id": "ex:JohnDoe",
+        "@type": "ex:Person",
+        "ex:hasName": "John Doe",
+        "ex:hasAge": 30
+      }
+    ]
+  }
+  

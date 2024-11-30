@@ -1,0 +1,73 @@
+{
+  "@context": {
+    "ex": "http://example.org/ns#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "ex:Task1",
+      "@type": "ex:ModalAnalysisTask",
+      "ex:title": "Modalanalyse einer Platte mit Sickenmuster #1",
+      "ex:inScope": "Wert der Eigenfrequenzen, Modalform",
+      "ex:outScope": "Amplitude, Materialspannung",
+      "ex:definitionStatus": {
+        "ex:case1": "Not Yet Started",
+        "ex:case2": "In Progress",
+        "ex:case3": "Complete"
+      },
+      "ex:physicsModel": {
+        "ex:catBase": {
+          "ex:case1": "Fluid",
+          "ex:case2": "Structure",
+          "ex:case3": "Multi Body"
+        },
+        "ex:catBaseBehaviour": {
+          "ex:case1": "Compressible",
+          "ex:case2": "Incompressible",
+          "ex:case3": "Elastic",
+          "ex:case4": "Inelastic"
+        },
+        "ex:catBaseThermal": {
+          "ex:case1": "Isothermal",
+          "ex:case2": "Non Isothermal"
+        },
+        "ex:catBaseTime": {
+          "ex:case1": "Stationary",
+          "ex:case2": "Transient"
+        },
+        "ex:catBaseComplexity": {
+          "ex:case1": "Laminar",
+          "ex:case2": "Turbulent"
+        },
+        "ex:catSpecial1": {
+          "ex:case1": "Fluid",
+          "ex:case2": "Structure",
+          "ex:case3": "Linear",
+          "ex:case4": "Non Linear"
+        }
+      },
+      "ex:taskDescription": "Die Modalanalyse mit Finiten Elementen ist eine Analyse der Steifigkeitsmatrix. Das Problem wird linearisiert, d. h. es kommen nur elastische Materialeigenschaften zum Einsatz. Kontakte werden vor der Berechnung geschlossen. Die als Ergebnis ausgegebenen Amplituden sind keine absoluten Amplituden, sondern dienen dem relativen Vergleich. Auch Materialspannungen werden mit einer Modalanalyse nicht berechnet. Zur Berechnung von Amplituden und Materialspannungen muss eine Frequency Response-Analyse gemacht werden."
+    },
+    {
+      "@id": "ex:numericsModel",
+      "@type": "ex:NumericsModel",
+      "ex:FEM": "FEM",
+      "ex:NonFEM": "Non FEM"
+    },
+    {
+      "@id": "ex:solverModel",
+      "@type": "ex:SolverModel",
+      "ex:case1": "Abaqus",
+      "ex:case2": "Epilysis",
+      "ex:case3": "MSC Nastran",
+      "ex:case4": "UG NX Nastran",
+      "ex:case5": "LS Dyna",
+      "ex:case6": "Radioss",
+      "ex:case7": "OpenRadioss",
+      "ex:case8": "OpenFOAM",
+      "ex:case9": "Fluent",
+      "ex:case10": "StarCCM+"
+    }
+  ]
+}
