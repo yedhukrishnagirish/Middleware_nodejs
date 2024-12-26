@@ -81,7 +81,7 @@ async function cloneRepo(token, repoUrl, branch, destDir) {
 
 // Route to clone the repository and load JSON files
 app.get('/clone', async (req, res) => {
-    const token = 'glpat-pGzhzJoFPgPb4xv7ybye'; // process.env.GITLAB_TOKEN; // Your GitLab token from .env file
+    const token =    'glpat-zmxiuMJUjxND7pZJ-iHV'  //'glpat-pGzhzJoFPgPb4xv7ybye'; // process.env.GITLAB_TOKEN; // Your GitLab token from .env file
     const repoUrl = 'https://erbenschell.iese.fraunhofer.de/ep40_processcompanion/test.git';
     const branch = 'dev';
 

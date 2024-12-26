@@ -50,7 +50,7 @@ async function cloneRepo(token, repoUrl, branch, destDir) {
 
 // Route to clone the repository
 app.get('/clone', async (req, res) => {
-    const token = 'glpat-pGzhzJoFPgPb4xv7ybye' // process.env.GITLAB_TOKEN; // Your GitLab token from .env file
+    const token = 'glpat-zmxiuMJUjxND7pZJ-iHV' //'glpat-pGzhzJoFPgPb4xv7ybye' // process.env.GITLAB_TOKEN; // Your GitLab token from .env file
     const repoUrl = 'https://erbenschell.iese.fraunhofer.de/ep40_processcompanion/test.git';
     const branch = 'dev';
 
@@ -60,16 +60,18 @@ app.get('/clone', async (req, res) => {
         return res.status(500).json({ error: 'Failed to clone repository' });
     }
 
-    const definitionFilePath = path.join(CLONE_DIR, 'loadcase_template', 'loadcase', 'definition.json');
-    const solutionFilePath = path.join(CLONE_DIR, 'loadcase_template', 'loadcase', 'solution.json');
-    const documentConfigFilePath = path.join(CLONE_DIR, 'loadcase_template', 'loadcase', 'document_configuration.json');
+    const definitionFilePath = path.join(CLONE_DIR, 'loadcase_template', 'load_case1', 'definition.json');
+    const solutionFilePath = path.join(CLONE_DIR, 'loadcase_template', 'load_case1', 'solution.json');
+    const documentConfigFilePath = path.join(CLONE_DIR, 'loadcase_template', 'load_case1', 'document_configuration.json');
+    const projectDetailsPath = path.join(CLONE_DIR, 'loadcase_template', 'load_case1', 'project_details.json');
 
     // Load JSON data from each file
     const definitionData = loadJsonFile(definitionFilePath);
     const solutionData = loadJsonFile(solutionFilePath);
     const documentConfigData = loadJsonFile(documentConfigFilePath);
+    const projectDetailData = loadJsonFile(projectDetailsPath);
 
-    if (!definitionData || !solutionData || !documentConfigData) {
+    if (!definitionData || !solutionData || !documentConfigData || !projectDetailData) {
         return res.status(500).json({ error: 'Failed to read one or more JSON files from the cloned repository' });
     }
 
@@ -81,13 +83,19 @@ app.get('/clone', async (req, res) => {
     res.json({
         definition: definitionData,
         solution: solutionData,
-        document_configuration: documentConfigData
+        document_configuration: documentConfigData,
+        project_detail: projectDetailData
     });
     //res.json({ definition: definitionData,});
+});
+
+// Route to provide help information
+app.get('/help', (req, res) => {
+    res.json({ help: "It's just a task from Segula\n and fraunhofer" });
 });
 
 // Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`Middleware is running on port ${PORT}`);
 });
