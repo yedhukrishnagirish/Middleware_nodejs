@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const neo4j = require('neo4j-driver');  // Import Neo4j driver
 require('dotenv').config();
+const { Client } = require('pg');  // Postgres client to interact with DB
 
 const app = express();
 const git = simpleGit();
@@ -12,6 +13,18 @@ const git = simpleGit();
 // Use CORS to allow requests from any origin
 app.use(cors());
 app.use(express.json());  // To parse JSON request body
+
+// Database connection setup
+const client = new Client({
+    user: 'admin',
+    host: 'localhost',
+    database: 'process_companion',
+    password: 'admin',
+    port: 5432,
+});
+
+// Connect to the PostgreSQL database
+client.connect();
 
 // Directory to clone the repository to
 const CLONE_DIR = path.join(__dirname, 'cloned_repo');
@@ -62,16 +75,18 @@ app.get('/clone', async (req, res) => {
 
     const definitionFilePath = path.join(CLONE_DIR, 'loadcase_template', 'load_case1', 'definition.json');
     const solutionFilePath = path.join(CLONE_DIR, 'loadcase_template', 'load_case1', 'solution.json');
+    const collectionFilePath = path.join(CLONE_DIR, 'loadcase_template', 'load_case1', 'collection.json');
     const documentConfigFilePath = path.join(CLONE_DIR, 'loadcase_template', 'load_case1', 'document_configuration.json');
     const projectDetailsPath = path.join(CLONE_DIR, 'loadcase_template', 'load_case1', 'project_details.json');
 
     // Load JSON data from each file
     const definitionData = loadJsonFile(definitionFilePath);
     const solutionData = loadJsonFile(solutionFilePath);
+    const collectionData = loadJsonFile(collectionFilePath);
     const documentConfigData = loadJsonFile(documentConfigFilePath);
     const projectDetailData = loadJsonFile(projectDetailsPath);
 
-    if (!definitionData || !solutionData || !documentConfigData || !projectDetailData) {
+    if (!definitionData || !solutionData || !documentConfigData || !projectDetailData || !collectionData) {
         return res.status(500).json({ error: 'Failed to read one or more JSON files from the cloned repository' });
     }
 
@@ -82,6 +97,7 @@ app.get('/clone', async (req, res) => {
     // Return the data in the response
     res.json({
         definition: definitionData,
+        collection: collectionData,
         solution: solutionData,
         document_configuration: documentConfigData,
         project_detail: projectDetailData
@@ -89,9 +105,119 @@ app.get('/clone', async (req, res) => {
     //res.json({ definition: definitionData,});
 });
 
-// Route to provide help information
-app.get('/help', (req, res) => {
+// Route to provide help information// Route to receive the field value and fetch help text from the database
+app.post('/help_definition', async (req, res) => {
+    const  field  = req.body._uvar_local_definition_help;  // Extract 'field' value from the request body
+
+    if (!field) {
+        return res.status(400).json({ error: "Field is required in the request body" });
+    }
+
+    console.log('Field received:', field);
+
+    try {
+        // Query the database to fetch the 'helper' text for the given field
+        const result = await client.query(
+            'SELECT helper FROM definition WHERE field = $1',
+            [field]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: `No helper text found for field: ${field}` });
+        }
+
+        // Send the corresponding helper text in the response
+        // Return the corresponding helper text in the 'help' key
+        res.json({
+            help: result.rows[0].helper,  // Return the helper text inside 'help'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database query failed' });
+    }
+});
+
+
+app.post('/help_collection', async (req, res) => {
+    console.log(req.body)
+    const field  = req.body._uvar_local_collection_help;  // Extract 'field' value from the request body
+
+    if (!field) {
+        return res.status(400).json({ error: "Field is required in the request body" });
+    }
+
+    console.log('Field received:', field);
+
+    try {
+        // Query the database to fetch the 'helper' text for the given field
+        const result = await client.query(
+            'SELECT helper FROM collection WHERE field = $1',
+            [field]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: `No helper text found for field: ${field}` });
+        }
+
+        // Send the corresponding helper text in the response
+        // Return the corresponding helper text in the 'help' key
+        res.json({
+            help: result.rows[0].helper,  // Return the helper text inside 'help'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database query failed' });
+    }
+});
+
+app.post('/help_solution', async (req, res) => {
+    console.log(req.body)
+    const field  = req.body._uvar_local_solution_help;  // Extract 'field' value from the request body
+
+    if (!field) {
+        return res.status(400).json({ error: "Field is required in the request body" });
+    }
+
+    console.log('Field received:', field);
+
+    try {
+        // Query the database to fetch the 'helper' text for the given field
+        const result = await client.query(
+            'SELECT helper FROM solution WHERE field = $1',
+            [field]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: `No helper text found for field: ${field}` });
+        }
+
+        // Send the corresponding helper text in the response
+        // Return the corresponding helper text in the 'help' key
+        res.json({
+            help: result.rows[0].helper,  // Return the helper text inside 'help'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Database query failed' });
+    }
+});
+
+
+app.post('/help_report', (req, res) => {
+    const data = req.body;  // Capture the JSON data sent in the request body
+    console.log('Data received:', data);
     res.json({ help: "It's just a task from Segula\n and fraunhofer" });
+});
+
+app.get('/status', async (req, res) => {
+    const responseDataFake = { 
+            name:"def",
+            items:["Load case","Simulation","Testing","Debugging","Deleting","Requirements","Hold","Vacation"],
+            difficulty:["Junior","Senior","Expert"]
+    }
+    
+
+    res.json(responseDataFake);
 });
 
 // Start the server

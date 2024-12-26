@@ -1,30 +1,19 @@
 version: '3.8'
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+  postgres-db:
+    image: postgres:15
+    container_name: postgres_container
+    restart: always
     environment:
-      - NODE_ENV=development
-      - ARANGODB_URL=http://arangodb:8529  # URL for ArangoDB
-      - ARANGODB_DB=yourDatabaseName  # Change this to your desired database name
-      - ARANGODB_USER=root  # Default username for ArangoDB
-      - ARANGODB_PASSWORD=admin  # Set your application password to 'admin'
-    depends_on:
-      - arangodb
-
-  arangodb:
-    image: arangodb:latest
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: process_companion
     ports:
-      - "8529:8529"  # ArangoDB HTTP API
-    environment:
-      - ARANGO_ROOT_PASSWORD=admin  # Set the root password to 'admin'
-      - ARANGO_DATABASE=yourDatabaseName  # Optionally, create a database at startup
+      - "5432:5432"
     volumes:
-      - arangodb_data:/var/lib/arangodb3  # Persist data
+      - postgres_data:/var/lib/postgresql/data
+
 
 volumes:
-  arangodb_data:
+  postgres_data:
